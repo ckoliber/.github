@@ -1,0 +1,57 @@
+name: Reusable CI/CD
+
+on:
+  workflow_call:
+    inputs:
+      tasks:
+        description: "Space-separated mise tasks to run, in order, before release (e.g. \"init test\")"
+        type: string
+        default: "test"
+      cache-path:
+        description: "Optional actions/cache path (skipped entirely if empty)"
+        type: string
+        default: ""
+      cache-key:
+        description: "actions/cache key, required if cache-path is set"
+        type: string
+        default: ""
+      mise-version:
+        description: "mise version to install"
+        type: string
+        default: "2026.9.15"
+    secrets:
+      GH_TOKEN:
+        description: "Token with contents:write, used by `mise run release` to create tags/releases"
+        required: true
+
+permissions:
+  contents: write
+  packages: write
+  attestations: write
+  id-token: write
+
+jobs:
+  cicd:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ckoliber/.github/actions/setup@main
+        with:
+          mise-version: ${{ inputs.mise-version }}
+
+      - if: inputs.cache-path != ''
+        uses: actions/cache@v6
+        with:
+          path: ${{ inputs.cache-path }}
+          key: ${{ inputs.cache-key }}
+
+      - name: Run tasks
+        run: |
+          for task in ${{ inputs.tasks }}; do
+            mise run "$task"
+          done
+
+      - if: github.event_name == 'push'
+        name: Release
+        run: mise run release
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}

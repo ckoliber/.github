@@ -1,0 +1,17 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", ":dependencyDashboard", "schedule:weekly"],
+  "automerge": true,
+  "packageRules": [
+    {
+      "description": "Group all GitHub Actions updates",
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions updates"
+    },
+    {
+      "description": "Group all mise-managed tool updates",
+      "matchManagers": ["mise"],
+      "groupName": "Dev tooling updates"
+    }
+  ]
+}

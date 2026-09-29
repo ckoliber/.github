@@ -1,0 +1,14 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Optional preset: Docker/OCI base-image update conventions. Extend this in addition to the org default.",
+  "docker": {
+    "pinDigests": true
+  },
+  "packageRules": [
+    {
+      "matchDatasources": ["docker"],
+      "commitMessagePrefix": "chore(docker):",
+      "labels": ["dependencies", "docker"]
+    }
+  ]
+}

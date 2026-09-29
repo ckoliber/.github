@@ -1,0 +1,21 @@
+name: Setup mise
+description: Checkout the repo and install mise-managed tools. Common first step for every workflow in this org.
+
+inputs:
+  mise-version:
+    description: "mise version to install"
+    default: "2026.9.15"
+  fetch-depth:
+    description: "git fetch-depth for actions/checkout (0 = full history, needed for git-cliff)"
+    default: "0"
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v7
+      with:
+        fetch-depth: ${{ inputs.fetch-depth }}
+
+    - uses: jdx/mise-action@v4
+      with:
+        version: ${{ inputs.mise-version }}

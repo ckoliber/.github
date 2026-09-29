@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+#MISE description="Regenerate CHANGELOG.md from conventional commits without releasing"
+#MISE tools.git-cliff="2"
+
+set -euo pipefail
+
+REF="main"
+CLIFF_CONFIG="$(mktemp)"
+trap 'rm -f "$CLIFF_CONFIG"' EXIT
+
+curl -fsSL "https://raw.githubusercontent.com/ckoliber/.github/${REF}/git-cliff/cliff.toml" -o "$CLIFF_CONFIG"
+
+git-cliff --config "$CLIFF_CONFIG" --output CHANGELOG.md "$@"
+
+echo "CHANGELOG.md updated."
