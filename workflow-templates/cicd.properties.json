@@ -1,7 +1,0 @@
-{
-  "name": "Org CI/CD (mise)",
-  "description": "Runs project mise tasks then publishes a release via the shared ckoliber cicd workflow.",
-  "iconName": "octicon rocket",
-  "categories": ["Continuous integration", "Deployment"],
-  "filePatterns": ["mise.toml$"]
-}

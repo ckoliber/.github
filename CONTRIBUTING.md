@@ -19,7 +19,6 @@ Most repositories in this organization use [mise](https://mise.jdx.dev) to manag
 
 ```sh
 mise install
-mise run setup
 ```
 
 ## Development tasks

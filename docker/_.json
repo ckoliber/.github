@@ -1,12 +1,11 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "description": "Optional preset: Docker/OCI base-image update conventions. Extend this in addition to the org default.",
-  "docker": {
-    "pinDigests": true
-  },
+  "description": "Renovate rules for docker repos (packageRules / hostRules). Extend alongside base/_.",
   "packageRules": [
     {
+      "description": "Pin image digests and label Docker updates",
       "matchDatasources": ["docker"],
+      "pinDigests": true,
       "commitMessagePrefix": "chore(docker):",
       "labels": ["dependencies", "docker"]
     }
