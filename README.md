@@ -24,7 +24,10 @@ A Terraform repo, for example:
 ```toml
 # mise.toml
 [tools]
-terraform = "1.16.6"
+terraform = "1.17.0"
+
+[settings]
+experimental = true # git:: task includes are experimental in mise
 
 [task_config]
 includes = ["git::https://github.com/ckoliber/.github.git//base?ref=main", "git::https://github.com/ckoliber/.github.git//terraform?ref=main"]
