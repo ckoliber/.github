@@ -1,0 +1,47 @@
+name: Reusable mise
+
+on:
+  workflow_call:
+    inputs:
+      task:
+        description: "mise task to run"
+        type: string
+        required: true
+      runs-on:
+        description: "Runner label"
+        type: string
+        default: self-hosted
+      working-directory:
+        description: "Directory to run the task in"
+        type: string
+        default: "."
+
+jobs:
+  cicd:
+    runs-on: ${{ inputs.runs-on }}
+    permissions:
+      issues: write
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - if: inputs.cache-path != ''
+        uses: actions/cache@v6
+        with:
+          path: ${{ inputs.cache-path }}
+          key: ${{ runner.os }}-${{ hashFiles(inputs.cache-hash) }}
+
+      - name: Export secrets
+        run: mise exec jq@1.8.1 -- jq -r 'to_entries[] | select(.key != "github_token") | "\(.key)<<EOF_\(.key)\n\(.value)\nEOF_\(.key)"' <<<"$SECRETS" >>"$GITHUB_ENV"
+        env:
+          SECRETS: ${{ toJSON(secrets) }}
+      - working-directory: ${{ inputs.working-directory }}
+        run: |
+          export PR_NUMBER="${{ github.event.pull_request.number }}"
+          [ "${{ github.event_name }}" = push ] && export PR_NUMBER=$(mise exec -- gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/pulls" --jq '.[0].number // empty')
+          mise run "${{ inputs.task }}"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}

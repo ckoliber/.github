@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "description": "Renovate rules for docker repos (packageRules / hostRules). Extend alongside base/_.",
+  "description": "Renovate rules for docker repos (packageRules / hostRules). Extend alongside base/renovate.",
   "packageRules": [
     {
       "description": "Pin image digests and label Docker updates",

@@ -1,0 +1,5 @@
+[tools]
+gh = "2.103.3"
+git-cliff = "2.14.2"
+node = "26.13.0"
+"npm:renovate" = "44.196.0"

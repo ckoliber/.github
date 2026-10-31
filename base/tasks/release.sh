@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
 
 #MISE description="Tag and publish a GitHub release from conventional commits, on release/prerelease branches"
-#MISE tools.git-cliff="2"
-#MISE tools.gh="2"
 
 set -euo pipefail
 
-# mise clones this whole repo for remote tasks, so .cliff.toml sits next to this file.
-CLIFF_CONFIG="$(dirname "${BASH_SOURCE[0]}")/.cliff.toml"
+# mise clones this whole repo for remote tasks, so .cliff.toml sits in the parent directory.
+CLIFF_CONFIG="$(dirname "${BASH_SOURCE[0]}")/../.cliff.toml"
 
 # git-cliff reads GITHUB_TOKEN for the contributors section; CI provides GH_TOKEN.
 export GITHUB_TOKEN="${GITHUB_TOKEN:-${GH_TOKEN:-}}"

@@ -1,17 +1,14 @@
 #!/usr/bin/env bash
 
 #MISE description="Build and push a multi-arch image to $GHCR_IMAGE and $DOCKER_IMAGE, tagged from conventional commits"
-#MISE tools.git-cliff="2"
 
-# Opt-in (not in base/, so it isn't included everywhere). Include it from a project with
-# "git::https://github.com/ckoliber/.github.git//docker?ref=main" in [task_config].includes
-# (not `file =`, which ignores the #MISE tools header). Expects GHCR_IMAGE, DOCKER_IMAGE and the
-# docker/buildx tools from the project's mise.toml.
+# Opt-in (not in base/, so it isn't included everywhere). Include docker/mise.toml and docker/tasks
+# from a project (see README). Expects GHCR_IMAGE and DOCKER_IMAGE, and git-cliff from base/mise.toml.
 
 set -euo pipefail
 
-# mise clones this whole repo for remote tasks, so base/.cliff.toml is available.
-CLIFF_CONFIG="$(dirname "${BASH_SOURCE[0]}")/../base/.cliff.toml"
+# mise clones this whole repo for remote tasks, so ../../base/.cliff.toml is available.
+CLIFF_CONFIG="$(dirname "${BASH_SOURCE[0]}")/../../base/.cliff.toml"
 
 # Current ref as "branch/<name>" or "tag/<name>", from GitHub/GitLab CI variables or local git.
 function get_ref() {
