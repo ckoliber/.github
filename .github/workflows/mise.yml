@@ -1,0 +1,57 @@
+name: Reusable mise
+
+on:
+  workflow_call:
+    inputs:
+      envs:
+        description: "Environment variables as a JSON object"
+        type: string
+        default: "{}"
+      cache:
+        description: "Cache configuration as a JSON object with path, key and optional restore-keys"
+        type: string
+        default: "{}"
+      script:
+        description: "Bash script to run (for example, mise run test)"
+        type: string
+        required: true
+
+jobs:
+  mise:
+    runs-on: ubuntu-latest
+    env: ${{ fromJSON(inputs.envs) }}
+    defaults:
+      run:
+        shell: bash
+    permissions:
+      issues: write
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Setup mise
+        uses: jdx/mise-action@v5
+
+      - name: Cache
+        if: fromJSON(inputs.cache).path != null && fromJSON(inputs.cache).path != ''
+        uses: actions/cache@v6
+        with:
+          path: ${{ fromJSON(inputs.cache).path }}
+          key: ${{ fromJSON(inputs.cache).key }}
+          restore-keys: ${{ fromJSON(inputs.cache).restore-keys || '' }}
+
+      - name: Export secrets
+        run: mise exec jq@1.8.1 -- jq -r 'to_entries[] | select(.key != "github_token") | "\(.key)<<EOF_\(.key)\n\(.value)\nEOF_\(.key)"' <<<"$SECRETS" >>"$GITHUB_ENV"
+        env:
+          SECRETS: ${{ toJSON(secrets) }}
+      - name: Run script
+        run: |
+          export PR_NUMBER="${{ github.event.pull_request.number }}"
+          [ "${{ github.event_name }}" = push ] && export PR_NUMBER=$(mise exec -- gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/pulls" --jq '.[0].number // empty')
+          bash -euo pipefail -c "$SCRIPT"
+        env:
+          SCRIPT: ${{ inputs.script }}
+          GITHUB_TOKEN: ${{ github.token }}

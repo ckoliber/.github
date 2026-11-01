@@ -1,0 +1,5 @@
+[tools]
+gh = "2.103.3"
+node = "26.13.0"
+git-cliff = "2.14.2"
+"npm:renovate" = { version = "44.198.3", allow_builds = "re2", trust_policy_excludes = "*" }
