@@ -3,55 +3,67 @@ name: Reusable mise
 on:
   workflow_call:
     inputs:
-      envs:
-        description: "Environment variables as a JSON object"
-        type: string
-        default: "{}"
-      cache:
-        description: "Cache configuration as a JSON object with path, key and optional restore-keys"
-        type: string
-        default: "{}"
       script:
         description: "Bash script to run (for example, mise run test)"
         type: string
         required: true
+      fetch-depth:
+        description: "Number of commits to fetch; 0 fetches all history and tags (needed by base:release)"
+        type: number
+        default: 1
+      cache-tools:
+        description: "Comma-separated tool caches to enable, without spaces (uv, ansible, npm, renovate, terraform), for example terraform,npm"
+        type: string
+        default: ""
 
 jobs:
   mise:
     runs-on: ubuntu-latest
-    env: ${{ fromJSON(inputs.envs) }}
-    defaults:
-      run:
-        shell: bash
-    permissions:
-      issues: write
-      contents: write
-      pull-requests: write
     steps:
       - uses: actions/checkout@v7
         with:
-          fetch-depth: 0
+          fetch-depth: ${{ inputs.fetch-depth }}
 
-      - name: Setup mise
-        uses: jdx/mise-action@v5
+      - uses: jdx/mise-action@v5
+        with:
+          install: true
 
-      - name: Cache
-        if: fromJSON(inputs.cache).path != null && fromJSON(inputs.cache).path != ''
+      - if: contains(format(',{0},', inputs.cache-tools), ',uv,')
         uses: actions/cache@v6
         with:
-          path: ${{ fromJSON(inputs.cache).path }}
-          key: ${{ fromJSON(inputs.cache).key }}
-          restore-keys: ${{ fromJSON(inputs.cache).restore-keys || '' }}
+          path: ~/.cache/uv
+          key: uv-${{ runner.os }}-${{ job.check_run_id }}
+          restore-keys: uv-${{ runner.os }}-
 
-      - name: Export secrets
-        run: mise exec jq@1.8.1 -- jq -r 'to_entries[] | select(.key != "github_token") | "\(.key)<<EOF_\(.key)\n\(.value)\nEOF_\(.key)"' <<<"$SECRETS" >>"$GITHUB_ENV"
-        env:
-          SECRETS: ${{ toJSON(secrets) }}
+      - if: contains(format(',{0},', inputs.cache-tools), ',ansible,')
+        uses: actions/cache@v6
+        with:
+          path: ~/.ansible
+          key: ansible-${{ runner.os }}-${{ job.check_run_id }}
+          restore-keys: ansible-${{ runner.os }}-
+
+      - if: contains(format(',{0},', inputs.cache-tools), ',npm,')
+        uses: actions/cache@v6
+        with:
+          path: ~/.npm
+          key: npm-${{ runner.os }}-${{ job.check_run_id }}
+          restore-keys: npm-${{ runner.os }}-
+
+      - if: contains(format(',{0},', inputs.cache-tools), ',renovate,')
+        uses: actions/cache@v6
+        with:
+          path: /tmp/renovate/cache
+          key: renovate-${{ runner.os }}-${{ job.check_run_id }}
+          restore-keys: renovate-${{ runner.os }}-
+
+      - if: contains(format(',{0},', inputs.cache-tools), ',terraform,')
+        uses: actions/cache@v6
+        with:
+          path: .terraform/providers
+          key: terraform-${{ runner.os }}-${{ job.check_run_id }}
+          restore-keys: terraform-${{ runner.os }}-
+
       - name: Run script
-        run: |
-          export PR_NUMBER="${{ github.event.pull_request.number }}"
-          [ "${{ github.event_name }}" = push ] && export PR_NUMBER=$(mise exec -- gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/pulls" --jq '.[0].number // empty')
-          bash -euo pipefail -c "$SCRIPT"
+        run: ${{ inputs.script }}
         env:
-          SCRIPT: ${{ inputs.script }}
           GITHUB_TOKEN: ${{ github.token }}

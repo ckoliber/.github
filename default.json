@@ -21,6 +21,13 @@
       "description": "Group all mise-managed tool updates",
       "matchManagers": ["mise"],
       "groupName": "Dev tooling updates"
+    },
+    {
+      "description": "Pin image digests and label Docker updates",
+      "matchDatasources": ["docker"],
+      "pinDigests": true,
+      "commitMessagePrefix": "chore(docker):",
+      "labels": ["dependencies", "docker"]
     }
   ]
 }

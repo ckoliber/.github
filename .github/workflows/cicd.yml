@@ -1,0 +1,19 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  cicd:
+    uses: ./.github/workflows/mise.yml
+    permissions:
+      contents: read
+    with:
+      script: |
+        mise tasks ls
+        mise exec actionlint@1.7.12 -- actionlint
+        renovate-config-validator --strict default.json .github/renovate.json

@@ -2,13 +2,13 @@
 
 #MISE description="Build and push a multi-arch image to $GHCR_IMAGE and $DOCKER_IMAGE, tagged from conventional commits"
 
-# Opt-in (not in base/, so it isn't included everywhere). Include docker/mise.toml and docker/
-# from a project (see README). Expects GHCR_IMAGE and DOCKER_IMAGE, and git-cliff from base/mise.toml.
+# Requires tools from mise.docker.toml and mise.base.toml (see README).
+# Expects GHCR_IMAGE and DOCKER_IMAGE.
 
 set -euo pipefail
 
-# mise clones this whole repo for remote tasks, so ../../base/.cliff.toml is available.
-CLIFF_CONFIG="$(dirname "${BASH_SOURCE[0]}")/../../base/.cliff.toml"
+# Shared configuration travels with the tasks directory.
+CLIFF_CONFIG="$(dirname "${BASH_SOURCE[0]}")/../.config/cliff.toml"
 
 # Current ref as "branch/<name>" or "tag/<name>", from GitHub/GitLab CI variables or local git.
 function get_ref() {

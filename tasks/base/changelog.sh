@@ -4,6 +4,6 @@
 
 set -euo pipefail
 
-git-cliff --config "$(dirname "${BASH_SOURCE[0]}")/.cliff.toml" --output CHANGELOG.md "$@"
+git-cliff --config "$(dirname "${BASH_SOURCE[0]}")/../.config/cliff.toml" --output CHANGELOG.md "$@"
 
 echo "CHANGELOG.md updated."

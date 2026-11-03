@@ -4,8 +4,8 @@
 
 set -euo pipefail
 
-# mise clones this whole repo for remote tasks, so .cliff.toml sits beside this script.
-CLIFF_CONFIG="$(dirname "${BASH_SOURCE[0]}")/.cliff.toml"
+# Shared configuration travels with the tasks directory.
+CLIFF_CONFIG="$(dirname "${BASH_SOURCE[0]}")/../.config/cliff.toml"
 
 # Current ref as "branch/<name>" or "tag/<name>", from GitHub/GitLab CI variables or local git.
 function get_ref() {

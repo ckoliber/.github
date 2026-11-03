@@ -1,7 +1,7 @@
 include = [
-  "base/mise.toml",
-  "docker/mise.toml",
-  "ansible/mise.toml",
-  "terraform/mise.toml",
+  "mise.base.toml",
+  "mise.docker.toml",
+  "mise.ansible.toml",
+  "mise.terraform.toml",
 ]
-task_config.includes = ["base", "docker", "ansible", "terraform"]
+task_config.includes = ["tasks"]
