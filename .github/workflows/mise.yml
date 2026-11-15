@@ -77,3 +77,4 @@ jobs:
         run: ${{ inputs.script }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
+          MISE_EXPERIMENTAL: true
