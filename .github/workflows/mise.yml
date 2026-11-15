@@ -27,8 +27,6 @@ jobs:
       - uses: jdx/mise-action@v5
         with:
           install: true
-          bootstrap: true
-          bootstrap_args: --from https://github.com/${{ job.workflow_repository }}.git?ref=${{ job.workflow_sha }} --yes
           cache_save_post: true
 
       - if: contains(format(',{0},', inputs.cache-tools), ',uv,')

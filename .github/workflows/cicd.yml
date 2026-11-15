@@ -14,8 +14,6 @@ jobs:
       contents: read
     with:
       script: |
-        export MISE_ENV=always
-        mise install
         mise tasks ls
         mise run renovate:check default.json .github/renovate.json
-        mise exec actionlint@1.7.12 -- actionlint -ignore 'property "workflow_(repository|sha)" is not defined'
+        mise exec actionlint@1.7.12 -- actionlint
