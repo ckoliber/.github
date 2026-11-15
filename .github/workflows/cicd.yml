@@ -1,0 +1,21 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  cicd:
+    uses: ckoliber/.github/.github/workflows/mise.yml@main
+    permissions:
+      contents: read
+    with:
+      script: |
+        export MISE_ENV=always
+        mise install
+        mise tasks ls
+        mise run renovate:check default.json .github/renovate.json
+        mise exec actionlint@1.7.12 -- actionlint -ignore 'property "workflow_(repository|sha)" is not defined'

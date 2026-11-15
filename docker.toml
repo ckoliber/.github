@@ -1,0 +1,7 @@
+[env]
+BUILDX = "docker-cli-plugin-docker-buildx"
+GHCR_REGISTRY = "ghcr.io"
+
+[tools]
+"aqua:docker/cli" = "29.9.2"
+"aqua:docker/buildx" = "0.38.1"

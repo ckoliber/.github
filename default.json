@@ -1,0 +1,33 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", ":dependencyDashboard", ":pinOnlyDevDependencies", "schedule:weekly"],
+  "packageRules": [
+    {
+      "description": "Automerge minor and patch updates",
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true
+    },
+    {
+      "description": "Automerge all GitHub Actions updates",
+      "matchManagers": ["github-actions"],
+      "automerge": true
+    },
+    {
+      "description": "Group all GitHub Actions updates",
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions updates"
+    },
+    {
+      "description": "Group all mise-managed tool updates",
+      "matchManagers": ["mise"],
+      "groupName": "Dev tooling updates"
+    },
+    {
+      "description": "Pin image digests and label Docker updates",
+      "matchDatasources": ["docker"],
+      "pinDigests": true,
+      "commitMessagePrefix": "chore(docker):",
+      "labels": ["dependencies", "docker"]
+    }
+  ]
+}
