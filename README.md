@@ -4,7 +4,7 @@ Shared CI workflow, Mise profiles, and Renovate preset.
 
 ## Projects
 
-Include the shared profiles and tasks in the project's `mise.toml`:
+Include the shared profiles and tasks in the project's `.mise.toml`:
 
 ```toml
 include = [

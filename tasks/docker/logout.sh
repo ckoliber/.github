@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#MISE description="Log out of GHCR_REGISTRY"
+#MISE description="Log out of the container registry"
 
 set -euo pipefail
 

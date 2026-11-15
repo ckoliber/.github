@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#MISE description="Tag and publish a GitHub release from conventional commits on release/prerelease branches, or print the next version"
+#MISE description="Release a new version from commits"
 #MISE dir="{{ cwd }}"
 #USAGE flag "--dry-run" help="Print the version without releasing"
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#MISE description="Lint the Dockerfile"
 #MISE dir="{{ cwd }}"
 
 set -euo pipefail

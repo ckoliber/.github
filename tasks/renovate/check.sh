@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#MISE description="Validate the Renovate config of this repository (or the config files passed as arguments)"
+#MISE description="Validate the Renovate config"
 #MISE dir="{{ cwd }}"
 
 set -euo pipefail

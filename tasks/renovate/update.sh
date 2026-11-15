@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#MISE description="Run Renovate against this repository (or the repositories passed as arguments)"
+#MISE description="Run Renovate on this repository"
 #MISE dir="{{ cwd }}"
 
 set -euo pipefail

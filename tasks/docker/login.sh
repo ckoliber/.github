@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#MISE description="Log in to GHCR_REGISTRY with the gh token (needs write:packages locally)"
+#MISE description="Log in to the container registry"
 
 set -euo pipefail
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#MISE description="Build and push the Docker image"
 #MISE dir="{{ cwd }}"
 #USAGE flag "--version <version>" help="Tag to push the image as" env="VERSION" required=#true
 #USAGE flag "--platform <platforms>" help="Comma-separated platforms to build for" env="DOCKER_PLATFORMS" default="linux/amd64,linux/arm64"

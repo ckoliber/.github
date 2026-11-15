@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#MISE description="Check Terraform formatting and validate the configuration"
+#MISE description="Check Terraform format and config"
 #MISE dir="{{ cwd }}"
 
 set -euo pipefail
