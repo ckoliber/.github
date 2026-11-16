@@ -9,14 +9,16 @@ set -euo pipefail
 [ "${GITHUB_REF_TYPE:-}" != branch ] || BRANCH=$GITHUB_REF_NAME
 BRANCH=${BRANCH:-${CI_COMMIT_BRANCH:-$(git symbolic-ref -q --short HEAD || true)}}
 
-# Tags: print the tag and stop
-if [ -z "$BRANCH" ] && git describe --tags --exact-match 2>/dev/null; then
-  exit 0
-fi
-
 # Tag prefix: none at the repo root, else the dir name
 PREFIX=$(git rev-parse --show-prefix)
 PREFIX=${PREFIX:+$(basename "$PWD")/}
+
+# Tags: print the version and stop
+if [ -z "$BRANCH" ] && TAG=$(git describe --tags --exact-match --match "$PREFIX[0-9]*" 2>/dev/null); then
+  echo "${TAG#"$PREFIX"}"
+  exit 0
+fi
+
 export GIT_CLIFF_CONFIG="$(cd "$(dirname "$0")" && pwd)/.cliff.toml" GIT_CLIFF_OFFLINE=true RUST_LOG=error
 export GIT_CLIFF_TAG_PATTERN="^${PREFIX}v?[0-9]+\.[0-9]+\.[0-9]+\$" GIT_CLIFF__BUMP__INITIAL_TAG=${PREFIX}0.1.0
 export GITHUB_REPO=${GITHUB_REPOSITORY:-$(git remote get-url origin | sed -E 's#(\.git)?/?$##; s#.*[:/]([^:/]+/[^:/]+)$#\1#')}
@@ -37,7 +39,7 @@ esac
 
 # Print, release, or skip
 if [ "${usage_dry_run:-false}" = true ]; then
-  echo "$TAG"
+  echo "${TAG#"$PREFIX"}"
 elif [ "$COUNT" != 0 ] && ! git rev-parse -q --verify "refs/tags/$TAG" >/dev/null; then
   NOTES=$(git cliff -u --tag "$TAG" --strip all)
   gh release create "$TAG" --target "$(git rev-parse HEAD)" --notes "$NOTES" --prerelease="${PRERELEASE:-false}"
