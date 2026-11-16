@@ -8,7 +8,7 @@ Include the shared profiles and tasks in the project's `.mise.toml`:
 
 ```toml
 include = [
-  "git::https://github.com/ckoliber/.github.git//always.toml?ref=main",
+  "git::https://github.com/ckoliber/.github.git//default.toml?ref=main",
   "git::https://github.com/ckoliber/.github.git//docker.toml?ref=main",
 ]
 task_config.includes = [
@@ -16,7 +16,7 @@ task_config.includes = [
 ]
 ```
 
-Profiles: `always`, `ansible`, `docker`, `terraform`.
+Profiles: `default`, `ansible`, `docker`, `terraform`.
 
 CI workflow and Renovate preset:
 

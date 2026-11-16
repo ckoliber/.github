@@ -1,2 +1,2 @@
-include = ["always.toml"]
+include = ["default.toml"]
 task_config.includes = ["tasks"]
