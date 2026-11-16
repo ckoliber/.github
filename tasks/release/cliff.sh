@@ -5,7 +5,7 @@
 
 set -euo pipefail
 
-# Branch: from CI vars (GitHub, GitLab), else git
+# Branch: from CI vars, else git
 [ "${GITHUB_REF_TYPE:-}" != branch ] || BRANCH=$GITHUB_REF_NAME
 BRANCH=${BRANCH:-${CI_COMMIT_BRANCH:-$(git symbolic-ref -q --short HEAD || true)}}
 
