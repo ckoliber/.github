@@ -2,6 +2,6 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["local>ckoliber/.github"],
   "mise": {
-    "managerFilePatterns": ["/^(always|ansible|docker|terraform)\\.toml$/"]
+    "managerFilePatterns": ["/^(default|ansible|docker|terraform)\\.toml$/"]
   }
 }
