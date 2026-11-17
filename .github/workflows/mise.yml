@@ -19,6 +19,10 @@ on:
 jobs:
   mise:
     runs-on: ubuntu-latest
+    env:
+      GIT_CONFIG_COUNT: 1
+      GIT_CONFIG_KEY_0: url.https://github.com/.insteadOf
+      GIT_CONFIG_VALUE_0: ssh://git@github.com/
     steps:
       - uses: actions/checkout@v7
         with:

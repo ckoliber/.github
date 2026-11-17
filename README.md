@@ -8,11 +8,11 @@ Include the shared profiles and tasks in the project's `.mise.toml`:
 
 ```toml
 include = [
-  "git::https://github.com/ckoliber/.github.git//default.toml?ref=main",
-  "git::https://github.com/ckoliber/.github.git//docker.toml?ref=main",
+  "git::ssh://git@github.com/ckoliber/.github.git//default.toml?ref=main",
+  "git::ssh://git@github.com/ckoliber/.github.git//docker.toml?ref=main",
 ]
 task_config.includes = [
-  "git::https://github.com/ckoliber/.github.git//tasks?ref=main",
+  "git::ssh://git@github.com/ckoliber/.github.git//tasks?ref=main",
 ]
 ```
 
