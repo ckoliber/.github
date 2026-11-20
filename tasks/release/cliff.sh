@@ -2,6 +2,7 @@
 #MISE description="Release a new version from commits"
 #MISE dir="{{ cwd }}"
 #USAGE flag "--dry-run" help="Print the version without releasing"
+#USAGE arg "[files]..." help="Files to attach to the release" var=#true
 
 set -euo pipefail
 
@@ -42,7 +43,7 @@ if [ "${usage_dry_run:-false}" = true ]; then
   echo "${TAG#"$PREFIX"}"
 elif [ "$COUNT" != 0 ] && ! git rev-parse -q --verify "refs/tags/$TAG" >/dev/null; then
   NOTES=$(git cliff -u --tag "$TAG" --strip all)
-  gh release create "$TAG" --target "$(git rev-parse HEAD)" --notes "$NOTES" --prerelease="${PRERELEASE:-false}"
+  gh release create "$TAG" "$@" --target "$(git rev-parse HEAD)" --notes "$NOTES" --prerelease="${PRERELEASE:-false}"
 else
   echo "Nothing to release on ${BRANCH:-HEAD}" >&2
 fi
